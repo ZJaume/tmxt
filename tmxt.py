@@ -92,7 +92,7 @@ def main():
     output = sys.stdout if not arguments["OUTPUT_FILE"] else open(arguments["OUTPUT_FILE"], "w")    
 
     codelist = arguments["--codelist"].split(",")
-    header = "--header" in arguments
+    header = arguments['--header']
     
     if len(codelist) > 1:
         if header:
