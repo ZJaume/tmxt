@@ -2,11 +2,12 @@
 specified.
 
 Usage:
-  tmxt.py --codelist=<langcodes> [INPUT_FILE [OUTPUT_FILE]]
+  tmxt.py --codelist=<langcodes> [--header] [INPUT_FILE [OUTPUT_FILE]]
 
 Options:
   --codelist=<langcodes>   Comma-separated list of langcodes (i.e. "en,es").
                            TU propierties can also be specified
+  --header                 Print header with column names from --codelist
   
 I/O Defaults:
   INPUT_FILE               Defaults to stdin.
@@ -91,8 +92,11 @@ def main():
     output = sys.stdout if not arguments["OUTPUT_FILE"] else open(arguments["OUTPUT_FILE"], "w")    
 
     codelist = arguments["--codelist"].split(",")
+    header = "--header" in arguments
     
     if len(codelist) > 1:
+        if header:
+            output.write('\t'.join(codelist) + '\n')
         process_tmx(input, output, codelist)
     
     input.close()
