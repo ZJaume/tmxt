@@ -28,13 +28,14 @@ def explore(fd, ntus=10):
         nonlocal ntu
         if name == "tuv":
             if "xml:lang" in attrs:
-                if attrs["xml:lang"] not in langset:
-                    langlist.append(attrs["xml:lang"])
-                    langset.add(attrs["xml:lang"])
+                lang = attrs["xml:lang"].lower()
             elif "lang" in attrs:
-                if attrs["lang"] not in langset:
-                    langlist.append(attrs["lang"])
-                    langset.add(attrs["lang"])
+                lang = attrs["lang"].lower()
+
+            if lang not in langset:
+                langlist.append(lang)
+                langset.add(lang)
+
         elif name == "tu":
             ntu += 1
             if ntu >= ntus + 1:
