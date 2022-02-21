@@ -92,6 +92,7 @@ def main():
     output = sys.stdout if not arguments["OUTPUT_FILE"] else open(arguments["OUTPUT_FILE"], "w")    
 
     codelist = arguments["--codelist"].split(",")
+    codelist = [c.replace('seg_', '') for c in codelist]
     header = arguments['--header']
     
     if len(codelist) > 1:
