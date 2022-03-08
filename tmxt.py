@@ -2,12 +2,13 @@
 specified.
 
 Usage:
-  tmxt.py --codelist=<langcodes> [--header] [INPUT_FILE [OUTPUT_FILE]]
+  tmxt.py --codelist=<langcodes> [--header] [--keep_seg] [INPUT_FILE [OUTPUT_FILE]]
 
 Options:
   --codelist=<langcodes>   Comma-separated list of langcodes (i.e. "en,es").
                            TU propierties can also be specified
   --header                 Print header with column names from --codelist
+  --keep_seg               Don't remove 'seg_' prefix from header fields
   
 I/O Defaults:
   INPUT_FILE               Defaults to stdin.
@@ -91,13 +92,18 @@ def main():
     input = sys.stdin.buffer if not arguments["INPUT_FILE"] else open(arguments["INPUT_FILE"], "rb")
     output = sys.stdout if not arguments["OUTPUT_FILE"] else open(arguments["OUTPUT_FILE"], "w")    
 
-    codelist = arguments["--codelist"].split(",")
-    codelist = [c.replace('seg_', '') for c in codelist]
+    codelist_seg = arguments["--codelist"].split(",")
+    codelist = [c.replace('seg_', '') for c in codelist_seg]
     header = arguments['--header']
+    keep_seg = arguments['--keep_seg']
     
     if len(codelist) > 1:
         if header:
-            output.write('\t'.join(codelist) + '\n')
+            if keep_seg:
+                # Don't remove seg_prefix
+                output.write('\t'.join(codelist_seg) + '\n')
+            else:
+                output.write('\t'.join(codelist) + '\n')
         process_tmx(input, output, codelist)
     
     input.close()
