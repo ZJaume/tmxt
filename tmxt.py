@@ -2,13 +2,14 @@
 specified.
 
 Usage:
-  tmxt.py --codelist=<langcodes> [--header] [--keep_seg] [INPUT_FILE [OUTPUT_FILE]]
+  tmxt.py --codelist=<langcodes> [--header] [--keep_seg] [--strict] [INPUT_FILE [OUTPUT_FILE]]
 
 Options:
   --codelist=<langcodes>   Comma-separated list of langcodes (i.e. "en,es").
                            TU propierties can also be specified
   --header                 Print header with column names from --codelist
   --keep_seg               Don't remove 'seg_' prefix from header fields
+  --strict                 Don't ignore SIGPIPE
   
 I/O Defaults:
   INPUT_FILE               Defaults to stdin.
@@ -96,6 +97,7 @@ def main():
     codelist = [c.replace('seg_', '') for c in codelist_seg]
     header = arguments['--header']
     keep_seg = arguments['--keep_seg']
+    strict_mode = arguments['--strict']
     
     if len(codelist) > 1:
         if header:
@@ -107,7 +109,14 @@ def main():
         process_tmx(input, output, codelist)
     
     input.close()
-    output.close()
+    try:
+        output.close()
+    except BrokenPipeError as e:
+        # Ignore SIGPIPE send by downstream process
+        # e.g. head or shuf -n0
+        # throw it in strict mode
+        if strict_mode:
+            raise e
 
 if __name__ == '__main__':
     main()
