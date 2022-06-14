@@ -21,6 +21,9 @@ import re
 import sys
 import xml.parsers.expat
 
+xml_tags = re.compile('<[^<>]*?>')
+xml_noise = re.compile('" id="[^<>]*?>')
+
 def process_tmx(input, output, codelist):
     curlang  = ""
     curtuv   = []
@@ -63,7 +66,8 @@ def process_tmx(input, output, codelist):
         elif name == "seg":
             intuv = False
             mystr = p2.sub(' ', p1.sub(' ', "".join(curtuv))).strip()
-            tu[curlang] = mystr
+            mystr = xml_noise.sub('',xml_tags.sub('', mystr))
+            tu[curlang] = mystr.replace('\t','&tab;')
             curlang = ""
         elif name == "prop":
             introp = False
