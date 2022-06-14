@@ -41,9 +41,9 @@ def process_tmx(input, output, codelist):
             tu = {i:'' for i in codelist}
         elif name == "tuv":
             if "xml:lang" in attrs:
-                curlang = attrs["xml:lang"].lower()
+                curlang = attrs["xml:lang"]
             elif "lang" in attrs:
-                curlang = attrs["lang"].lower()
+                curlang = attrs["lang"]
             numlangs += 1
         elif name == "seg":
             curtuv = []

@@ -32,9 +32,9 @@ def explore(fd, ntus=10, props=False):
         nonlocal ntu
         if name == "tuv":
             if "xml:lang" in attrs:
-                lang = attrs["xml:lang"].lower()
+                lang = attrs["xml:lang"]
             elif "lang" in attrs:
-                lang = attrs["lang"].lower()
+                lang = attrs["lang"]
 
             if props:
                 lang = 'seg_' + lang
