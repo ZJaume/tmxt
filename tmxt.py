@@ -99,18 +99,19 @@ def main():
     keep_seg = arguments['--keep_seg']
     strict_mode = arguments['--strict']
     
-    if len(codelist) > 1:
-        if header:
-            if keep_seg:
-                # Don't remove seg_prefix
-                output.write('\t'.join(codelist_seg) + '\n')
-            else:
-                output.write('\t'.join(codelist) + '\n')
-        process_tmx(input, output, codelist)
-    
-    input.close()
     try:
+        if len(codelist) > 1:
+            if header:
+                if keep_seg:
+                    # Don't remove seg_prefix
+                    output.write('\t'.join(codelist_seg) + '\n')
+                else:
+                    output.write('\t'.join(codelist) + '\n')
+            process_tmx(input, output, codelist)
+
+        input.close()
         output.close()
+
     except BrokenPipeError as e:
         # Ignore SIGPIPE send by downstream process
         # e.g. head or shuf -n0
