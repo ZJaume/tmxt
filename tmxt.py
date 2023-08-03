@@ -100,7 +100,7 @@ def main():
     strict_mode = arguments['--strict']
     
     try:
-        if len(codelist) > 1:
+        if len(codelist) > 0:
             if header:
                 if keep_seg:
                     # Don't remove seg_prefix
